@@ -1,0 +1,29 @@
+[project]
+name = "subtitle-renamer"
+version = "0.1.0"
+description = "A utility to rename subtitle files to match video files based on episode numbers"
+authors = [
+    {name = "iBakuman",email = "67883044+ibakuman@users.noreply.github.com"}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Utilities",
+]
+
+[project.scripts]
+subtitle-renamer = "subtitle_renamer.cli:main"
+
+[tool.poetry]
+packages = [{include = "subtitle_renamer", from = "src"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
