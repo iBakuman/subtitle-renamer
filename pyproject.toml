@@ -5,6 +5,7 @@ description = "A utility to rename subtitle files to match video files based on 
 authors = [
     {name = "iBakuman",email = "67883044+ibakuman@users.noreply.github.com"}
 ]
+license = { text = "MIT" }
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -16,6 +17,10 @@ classifiers = [
     "Topic :: Multimedia :: Video",
     "Topic :: Utilities",
 ]
+
+[project.urls]
+"Homepage" = "https://github.com/ibakuman/subtitle-renamer"
+"Bug Tracker" = "https://github.com/ibakuman/subtitle-renamer/issues"
 
 [project.scripts]
 subtitle-renamer = "subtitle_renamer.cli:main"
