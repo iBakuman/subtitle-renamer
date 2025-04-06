@@ -1,6 +1,6 @@
 [project]
 name = "subtitle-renamer"
-version = "0.1.0"
+version = "0.1.1"
 description = "A utility to rename subtitle files to match video files based on episode numbers"
 authors = [
     {name = "iBakuman",email = "67883044+ibakuman@users.noreply.github.com"}
