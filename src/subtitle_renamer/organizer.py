@@ -14,7 +14,8 @@ Input directory layout expectation:
 This tool renames videos to: "<Series Name> S<season:02>E<episode:02><ext>"
 
 Only a single root directory is required, and the tool scans existing season
-subdirectories. It does not move directories; it only renames video files in place.
+subdirectories. If a series folder has no season subfolders but contains videos,
+the tool will create "Season 01" and move all entries into it, then rename videos.
 """
 
 import os
@@ -72,6 +73,11 @@ def _parse_episode_from_filename(filename: str) -> Optional[int]:
     if m:
         return int(m.group(1))
 
+    # Space-padded numbers: " 07 " → use the number
+    m = re.search(r"\s(\d{1,3})\s", base)
+    if m:
+        return int(m.group(1))
+
     # Fallback: last number sequence
     numbers = re.findall(r"(\d{1,3})", base)
     if numbers:
@@ -122,7 +128,38 @@ class VideoOrganizer:
                 continue
 
             # series_name is used as-is in target filenames
-            for season_dir in sorted(os.listdir(series_path)):
+            entries = sorted(os.listdir(series_path))
+
+            # Detect whether there are season subdirectories
+            season_dirs = [d for d in entries if os.path.isdir(os.path.join(series_path, d)) and _parse_season_from_dirname(d) is not None]
+
+            # If there is no valid season dir but there are files, create Season 01 and move all entries
+            if not season_dirs:
+                has_files = any(os.path.isfile(os.path.join(series_path, e)) for e in entries)
+                if has_files:
+                    season01 = os.path.join(series_path, "Season 01")
+                    if not self.dry_run:
+                        os.makedirs(season01, exist_ok=True)
+                    else:
+                        logger.info(f"Would create directory: {os.path.relpath(season01, self.root_dir)}")
+
+                    for e in entries:
+                        src_e = os.path.join(series_path, e)
+                        # move everything (files and subdirs) into Season 01
+                        dst_e = os.path.join(season01, e)
+                        if self.dry_run:
+                            logger.info(f"Would move: {os.path.relpath(src_e, self.root_dir)} -> {os.path.relpath(dst_e, self.root_dir)}")
+                            continue
+                        try:
+                            os.rename(src_e, dst_e)
+                        except Exception as move_err:
+                            logger.error(f"Error moving {os.path.relpath(src_e, self.root_dir)}: {str(move_err)}")
+
+                    # refresh entries and season_dirs after moving
+                    entries = sorted(os.listdir(series_path))
+                    season_dirs = [d for d in entries if os.path.isdir(os.path.join(series_path, d)) and _parse_season_from_dirname(d) is not None]
+
+            for season_dir in season_dirs:
                 season_path = os.path.join(series_path, season_dir)
                 if not os.path.isdir(season_path):
                     continue
