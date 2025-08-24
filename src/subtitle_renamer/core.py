@@ -10,7 +10,7 @@ import shutil
 import logging
 from typing import Dict, List, Tuple, Pattern
 
-from .utils import get_episode_number
+from utils import get_episode_number
 
 # Set up logging
 logger = logging.getLogger(__name__)

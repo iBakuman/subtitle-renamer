@@ -10,5 +10,6 @@ __version__ = "0.1.0"
 from .core import SubtitleRenamer
 from .cli import main
 from .utils import get_episode_number
+from .organizer import VideoOrganizer
 
-__all__ = ["SubtitleRenamer", "main", "get_episode_number"]
+__all__ = ["SubtitleRenamer", "main", "get_episode_number", "VideoOrganizer"]

@@ -24,6 +24,7 @@ classifiers = [
 
 [project.scripts]
 subtitle-renamer = "subtitle_renamer.cli:main"
+organize-shows = "subtitle_renamer.cli:main"
 
 [tool.poetry]
 packages = [{include = "subtitle_renamer", from = "src"}]
