@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Organize video files into a consistent naming scheme within existing season folders.
+Organize video, subtitle, and NFO files into a consistent naming scheme within existing season folders.
 
 Input directory layout expectation:
 <root>/
@@ -11,7 +11,7 @@ Input directory layout expectation:
     Season 02/
       <any video files>
 
-This tool renames videos to: "<Series Name> S<season:02>E<episode:02><ext>"
+This tool renames files to: "<Series Name> S<season:02>E<episode:02><ext>"
 
 Only a single root directory is required, and the tool scans existing season
 subdirectories. If a series folder has no season subfolders but contains videos,
@@ -27,14 +27,17 @@ from typing import Optional, Tuple
 logger = logging.getLogger(__name__)
 
 
-# Reuse video extensions from core without importing to avoid cycles
+# Known extensions (duplicated from core to avoid import cycles)
 VIDEO_EXTENSIONS = ['.mkv', '.mp4', '.avi', '.mov', '.flv', '.wmv', '.m4v', '.webm']
+SUBTITLE_EXTENSIONS = ['.srt', '.ass', '.ssa', '.vtt', '.sub']
+NFO_EXTENSIONS = ['.nfo']
+TARGET_EXTENSIONS = VIDEO_EXTENSIONS + SUBTITLE_EXTENSIONS + NFO_EXTENSIONS
 
 
-def _is_video_file(filename: str) -> bool:
-    """Return True if filename has a known video extension."""
+def _is_target_file(filename: str) -> bool:
+    """Return True if filename has a known target extension (video/subtitle/nfo)."""
     lower = filename.lower()
-    return any(lower.endswith(ext) for ext in VIDEO_EXTENSIONS)
+    return any(lower.endswith(ext) for ext in TARGET_EXTENSIONS)
 
 
 def _parse_season_from_dirname(dirname: str) -> Optional[int]:
@@ -171,7 +174,7 @@ class VideoOrganizer:
                     continue
 
                 for name in sorted(os.listdir(season_path)):
-                    if not _is_video_file(name):
+                    if not _is_target_file(name):
                         continue
 
                     total += 1
