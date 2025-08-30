@@ -1,0 +1,5 @@
+# A: Nth number (1-based; -1 is last)
+mode = "A"
+number_index = 1
+ignore_version_suffix = true
+on_miss = "error"

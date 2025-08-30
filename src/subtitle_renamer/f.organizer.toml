@@ -1,0 +1,5 @@
+# F: Sample with one {...} marker
+mode = "F"
+sample = "{20} 4K"
+ignore_version_suffix = true
+on_miss = "error"

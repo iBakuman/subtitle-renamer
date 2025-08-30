@@ -1,0 +1,7 @@
+# B: Nth bracketed segment, custom tokens
+mode = "B"
+bracket_open = "["
+bracket_close = "]"
+bracket_index = 1
+ignore_version_suffix = true
+on_miss = "error"
